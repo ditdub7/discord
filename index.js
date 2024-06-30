@@ -1,5 +1,5 @@
-// index.js 
-const { Client, GatewayIntentBits, Partials, EmbedBuilder } = require('discord.js');
+// index.js
+const { Client, Intents, Partials, MessageEmbed } = require('discord.js'); // Updated import for Intents
 const axios = require('axios');
 const dotenv = require('dotenv');
 dotenv.config();
@@ -14,13 +14,14 @@ const CHANNEL_ID = '1256526266316619837';
 // Importing keep_alive.js
 const keepAlive = require('./keep_alive.js');
 
+// Define intents using Intents.FLAGS
 const client = new Client({
     intents: [
-        GatewayIntentBits.Guilds,
-        GatewayIntentBits.GuildMessages,
-        GatewayIntentBits.MessageContent
+        Intents.FLAGS.GUILDS,
+        Intents.FLAGS.GUILD_MESSAGES,
+        Intents.FLAGS.MESSAGE_CONTENTS
     ],
-    partials: [Partials.Channel]
+    partials: [Partials.CHANNEL]
 });
 
 let statusMessage = null;
@@ -30,7 +31,7 @@ client.once('ready', async () => {
     console.log(`Logged in as ${client.user.tag}`);
     try {
         const channel = await client.channels.fetch(CHANNEL_ID);
-        if (channel.isTextBased()) {
+        if (channel.isText()) { // Adjusted method name to isText()
             // Check if there's an existing status message
             const messages = await channel.messages.fetch();
             const botMessages = messages.filter(msg => msg.author.id === client.user.id);
@@ -38,7 +39,7 @@ client.once('ready', async () => {
                 statusMessage = botMessages.first();
                 console.log('Old message found');
             } else {
-                statusMessage = await channel.send('‎ ');
+                statusMessage = await channel.send('‎ '); // Added non-breaking space character for visibility
                 console.log('No old message found, sending new');
             }
         }
@@ -125,24 +126,13 @@ function formatOfflineUsers(data) {
     const timestamp = Math.floor(Date.now() / 1000);  // UNIX timestamp in seconds
     description += `\n*Last updated <t:${timestamp}:R>*`;
 
-    return new EmbedBuilder()
+    return new MessageEmbed() // Updated to MessageEmbed
         .setTitle('C4T6 Offline Members')
         .setDescription(description)
         .setColor(0xff0000)
-        .setFooter({ text: 'Shiba offline checker for C4T6‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ' });
+        .setFooter('Shiba offline checker for C4T6'); // Updated footer format
 }
 
 client.login(TOKEN);
 
-// keep_alive.js
-const http = require('http');
-
-const server = http.createServer((req, res) => {
-  res.writeHead(200, { 'Content-Type': 'text/plain' });
-  res.end('Discord bot is running!');
-});
-
-const PORT = process.env.PORT || 8080;
-server.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+// keep_alive.js remains unchanged
