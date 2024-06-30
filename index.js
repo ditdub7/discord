@@ -1,7 +1,8 @@
-require('dotenv').config(); // This loads the .env file into process.env
-
+// index.js 
 const { Client, GatewayIntentBits, Partials, EmbedBuilder } = require('discord.js');
 const axios = require('axios');
+const dotenv = require('dotenv');
+dotenv.config();
 
 const TOKEN = process.env.TOKEN;
 const URL = 'https://api.shiba99.com/batch/C4T6';
@@ -9,6 +10,9 @@ const CHECK_INTERVAL = 120000;  // Check every 120 seconds
 const OFFLINE_THRESHOLD_MINUTES = 20;
 const OFFLINE_THRESHOLD_MINUTES_EXTENDED = 2880; // 48 hours in minutes
 const CHANNEL_ID = '1256526266316619837';
+
+// Importing keep_alive.js
+const keepAlive = require('./keep_alive.js');
 
 const client = new Client({
     intents: [
@@ -129,3 +133,16 @@ function formatOfflineUsers(data) {
 }
 
 client.login(TOKEN);
+
+// keep_alive.js
+const http = require('http');
+
+const server = http.createServer((req, res) => {
+  res.writeHead(200, { 'Content-Type': 'text/plain' });
+  res.end('Discord bot is running!');
+});
+
+const PORT = process.env.PORT || 8080;
+server.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
