@@ -1,5 +1,5 @@
 // index.js
-const { Client, Intents, Partials, MessageEmbed } = require('discord.js'); // Updated import for Intents
+const { Client, Intents, Partials, MessageEmbed } = require('discord.js');
 const axios = require('axios');
 const dotenv = require('dotenv');
 dotenv.config();
@@ -31,7 +31,7 @@ client.once('ready', async () => {
     console.log(`Logged in as ${client.user.tag}`);
     try {
         const channel = await client.channels.fetch(CHANNEL_ID);
-        if (channel.isText()) { // Adjusted method name to isText()
+        if (channel.isText()) { // Corrected method name to isText()
             // Check if there's an existing status message
             const messages = await channel.messages.fetch();
             const botMessages = messages.filter(msg => msg.author.id === client.user.id);
@@ -126,11 +126,11 @@ function formatOfflineUsers(data) {
     const timestamp = Math.floor(Date.now() / 1000);  // UNIX timestamp in seconds
     description += `\n*Last updated <t:${timestamp}:R>*`;
 
-    return new MessageEmbed() // Updated to MessageEmbed
+    return new MessageEmbed()
         .setTitle('C4T6 Offline Members')
         .setDescription(description)
         .setColor(0xff0000)
-        .setFooter('Shiba offline checker for C4T6'); // Updated footer format
+        .setFooter('Shiba offline checker for C4T6');
 }
 
 client.login(TOKEN);
