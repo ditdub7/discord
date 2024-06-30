@@ -1,0 +1,14 @@
+{
+  "name": "discord-bot",
+  "version": "1.0.0",
+  "description": "Discord bot for monitoring user status",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "discord.js": "^13.6.0",
+    "axios": "^0.24.0",
+    "dotenv": "^10.0.0"
+  }
+}
